@@ -13,7 +13,7 @@ try:
         database="sys"
     )
 
-    # 
+    # Utworzenie kursora w celu połączenia i wykonywania poleceń na bazie danych
     cursor = db.cursor()
 
     # Tworzenie tabeli, jeśli nie istnieje
