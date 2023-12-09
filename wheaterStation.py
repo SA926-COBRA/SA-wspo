@@ -1,46 +1,69 @@
 # Import niezbędnych bibliotek
+from dotenv import load_dotenv
 import mysql.connector
+import os
 import urllib.request
 import xml.etree.ElementTree as ET
+
+class DatabaseConfig:
+    def __init__(self):
+        # Wczytanie zmienne środowiskowe z pliku .env
+        load_dotenv()
+
+        # Przypisanie wartości do atrybutów
+        self.DB_HOST = os.getenv("DB_HOST")
+        self.DB_USER = os.getenv("DB_USER")
+        self.DB_PASSWORD = os.getenv("DB_PASSWORD")
+        self.DB_DATABASE = os.getenv("DB_DATABASE")
+
+# Utworzenie instancji klasy
+db_config = DatabaseConfig()
+
+# Tworzenie tabeli, jeśli nie istnieje
+createTableQuery = """CREATE TABLE IF NOT EXISTS POGODA_W_POLSCE (
+  id INT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id_stacji INT,
+  stacja VARCHAR(255),
+  data_pomiaru DATE,
+  godzina_pomiaru VARCHAR(10),
+  temperatura FLOAT,
+  predkosc_wiatru FLOAT,
+  kierunek_wiatru INT,
+  wilgotnosc_wzgledna FLOAT,
+  suma_opadu FLOAT,
+  cisnienie FLOAT,
+  roznica_cisnien FLOAT
+);"""
+
+# Pobieranie i parsowanie danych z API
+def getAndParseXmlData(apiUrl):
+    xmlUrl = urllib.request.urlopen(apiUrl)
+    xmlAsString = xmlUrl.read()
+    xmlTree = ET.fromstring(xmlAsString)
+    foundMeasurement = xmlTree.findall("item")
+    
+    return foundMeasurement
+
+apiUrl = "https://danepubliczne.imgw.pl/api/data/synop/format/xml"
 
 # Blok try-except mający na celu zapobieganie całkowitego zatrzymania sie programu i wyświetleniu komunikatów w przypadku wystąpienia błędów
 try:
     # Połączenie z bazą danych
     db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="secret-password",
-        database="sys"
+        host=db_config.DB_HOST,
+        user=db_config.DB_USER,
+        password=db_config.DB_PASSWORD,
+        database=db_config.DB_DATABASE
     )
 
     # Utworzenie kursora w celu połączenia i wykonywania poleceń na bazie danych
     cursor = db.cursor()
 
-    # Tworzenie tabeli, jeśli nie istnieje
-    createTableQuery = """CREATE TABLE IF NOT EXISTS POGODA_W_POLSCE (
-      id INT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      id_stacji INT,
-      stacja VARCHAR(255),
-      data_pomiaru DATE,
-      godzina_pomiaru VARCHAR(10),
-      temperatura FLOAT,
-      predkosc_wiatru FLOAT,
-      kierunek_wiatru INT,
-      wilgotnosc_wzgledna FLOAT,
-      suma_opadu FLOAT,
-      cisnienie FLOAT,
-      roznica_cisnien FLOAT
-    );"""
-
     # Wykonanie zapytania ze zmiennej createTableQuery
     cursor.execute(createTableQuery)
 
-    # Pobieranie danych z API i parsowanie XML
-    xmlPath = "https://danepubliczne.imgw.pl/api/data/synop/format/xml"
-    xmlUrl = urllib.request.urlopen(xmlPath)
-    xmlAsString = xmlUrl.read()
-    xmlTree = ET.fromstring(xmlAsString)
-    foundMeasurement = xmlTree.findall("item")
+    # Wywołanie funkcji i przypisanie zwróconej wartości do zmiennej
+    foundMeasurement = getAndParseXmlData(apiUrl)
 
     # Dodawanie rekordów ze sparsowanego XML
     for measurement in foundMeasurement:
@@ -63,7 +86,7 @@ try:
                 roznica_cisnien = None
 
             #  Wstawienie rekordu do bazy danych z pominięciem duplikatów
-            recordToInsert = """INSERT INTO POGODA_W_POLSCE (
+            insertQuery = """INSERT INTO POGODA_W_POLSCE (
                 id_stacji,
                 stacja, 
                 data_pomiaru,
@@ -98,8 +121,8 @@ try:
                     godzina_pomiaru = tmp.godzina_pomiaru
             );"""
 
-            # Wykonanie polecenia ze zmiennej recordToInsert
-            cursor.execute(recordToInsert, (
+            # Wykonanie polecenia ze zmiennej insertQuery
+            cursor.execute(insertQuery, (
                 id_stacji, stacja, data_pomiaru, godzina_pomiaru, temperatura, predkosc_wiatru, kierunek_wiatru,
                 wilgotnosc_wzgledna, suma_opadu, cisnienie, roznica_cisnien))
             
