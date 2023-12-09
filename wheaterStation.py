@@ -62,7 +62,7 @@ try:
             else:
                 roznica_cisnien = None
 
-            #  Zapisanie rekordu do wstwanienia do bazy danych do zmiennej
+            #  Wstawienie rekordu do bazy danych z pominięciem duplikatów
             recordToInsert = """INSERT INTO POGODA_W_POLSCE (
                 id_stacji,
                 stacja, 
@@ -74,10 +74,31 @@ try:
                 wilgotnosc_wzgledna, 
                 suma_opadu,
                 cisnienie,
-                roznica_cisnien) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s
-            )"""
+                roznica_cisnien
+            ) 
+            SELECT * FROM (
+                SELECT 
+                  %s as id_stacji,
+                  %s as stacja,
+                  %s as data_pomiaru,
+                  %s as godzina_pomiaru,
+                  %s as temperatura,
+                  %s as predkosc_wiatru,
+                  %s as kierunek_wiatru,
+                  %s as wilgotnosc_wzgledna,
+                  %s as suma_opadu,
+                  %s as cisnienie,
+                  %s as roznica_cisnien
+            ) AS tmp WHERE NOT EXISTS (
+                SELECT * 
+                FROM POGODA_W_POLSCE 
+                WHERE 
+                    id_stacji = tmp.id_stacji AND
+                    data_pomiaru = tmp.data_pomiaru AND
+                    godzina_pomiaru = tmp.godzina_pomiaru
+            );"""
 
-            # Wstawienie rekordu ze zmiennej recordToInsert do bazy danych 
+            # Wykonanie polecenia ze zmiennej recordToInsert
             cursor.execute(recordToInsert, (
                 id_stacji, stacja, data_pomiaru, godzina_pomiaru, temperatura, predkosc_wiatru, kierunek_wiatru,
                 wilgotnosc_wzgledna, suma_opadu, cisnienie, roznica_cisnien))
