@@ -5,6 +5,9 @@ import os
 import urllib.request
 import xml.etree.ElementTree as ET
 
+# Import funkcji z innych plików
+from sqlQueries import *
+
 class DatabaseConfig:
     def __init__(self):
         # Wczytanie zmienne środowiskowe z pliku .env
@@ -19,21 +22,22 @@ class DatabaseConfig:
 # Utworzenie instancji klasy
 db_config = DatabaseConfig()
 
-# Tworzenie tabeli, jeśli nie istnieje
-createTableQuery = """CREATE TABLE IF NOT EXISTS POGODA_W_POLSCE (
-  id INT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  id_stacji INT,
-  stacja VARCHAR(255),
-  data_pomiaru DATE,
-  godzina_pomiaru VARCHAR(10),
-  temperatura FLOAT,
-  predkosc_wiatru FLOAT,
-  kierunek_wiatru INT,
-  wilgotnosc_wzgledna FLOAT,
-  suma_opadu FLOAT,
-  cisnienie FLOAT,
-  roznica_cisnien FLOAT
-);"""
+# IMPLEMENTACJA KLASY - DO POPRAWY I ZASTOSOWANIA W KODZIE
+class WeatherMeasurement:
+    def __init__(self, measurement):
+        self.id_stacji = measurement.find("id_stacji").text
+        self.stacja = measurement.find("stacja").text
+        self.data_pomiaru = measurement.find("data_pomiaru").text
+        self.godzina_pomiaru = measurement.find("godzina_pomiaru").text
+        self.temperatura = measurement.find("temperatura").text
+        self.predkosc_wiatru = measurement.find("predkosc_wiatru").text
+        self.kierunek_wiatru = measurement.find("kierunek_wiatru").text
+        self.wilgotnosc_wzgledna = measurement.find("wilgotnosc_wzgledna").text
+        self.suma_opadu = measurement.find("suma_opadu").text
+        self.cisnienie = measurement.find("cisnienie").text
+
+# Przypisanie linku API do zmiennej
+apiUrl = "https://danepubliczne.imgw.pl/api/data/synop/format/xml"
 
 # Pobieranie i parsowanie danych z API
 def getAndParseXmlData(apiUrl):
@@ -41,12 +45,14 @@ def getAndParseXmlData(apiUrl):
     xmlAsString = xmlUrl.read()
     xmlTree = ET.fromstring(xmlAsString)
     foundMeasurement = xmlTree.findall("item")
-    
+   
+    # Przekształcanie znalezionych pomiarów na obiekty
+    foundMeasurementObjects = [WeatherMeasurement(measurement) for measurement in foundMeasurement]
+
+    # return foundMeasurementObjects
     return foundMeasurement
 
-apiUrl = "https://danepubliczne.imgw.pl/api/data/synop/format/xml"
-
-# Blok try-except mający na celu zapobieganie całkowitego zatrzymania sie programu i wyświetleniu komunikatów w przypadku wystąpienia błędów
+# Blok try-except mający na celu zapobieganie całkowitego zatrzymania się programu i wyświetleniu komunikatów w przypadku wystąpienia błędów
 try:
     # Połączenie z bazą danych
     db = mysql.connector.connect(
@@ -58,10 +64,8 @@ try:
 
     # Utworzenie kursora w celu połączenia i wykonywania poleceń na bazie danych
     cursor = db.cursor()
-
     # Wykonanie zapytania ze zmiennej createTableQuery
-    cursor.execute(createTableQuery)
-
+    cursor.execute(createTableQuery())
     # Wywołanie funkcji i przypisanie zwróconej wartości do zmiennej
     foundMeasurement = getAndParseXmlData(apiUrl)
 
@@ -85,44 +89,8 @@ try:
             else:
                 roznica_cisnien = None
 
-            #  Wstawienie rekordu do bazy danych z pominięciem duplikatów
-            insertQuery = """INSERT INTO POGODA_W_POLSCE (
-                id_stacji,
-                stacja, 
-                data_pomiaru,
-                godzina_pomiaru,
-                temperatura,
-                predkosc_wiatru,
-                kierunek_wiatru,
-                wilgotnosc_wzgledna, 
-                suma_opadu,
-                cisnienie,
-                roznica_cisnien
-            ) 
-            SELECT * FROM (
-                SELECT 
-                  %s as id_stacji,
-                  %s as stacja,
-                  %s as data_pomiaru,
-                  %s as godzina_pomiaru,
-                  %s as temperatura,
-                  %s as predkosc_wiatru,
-                  %s as kierunek_wiatru,
-                  %s as wilgotnosc_wzgledna,
-                  %s as suma_opadu,
-                  %s as cisnienie,
-                  %s as roznica_cisnien
-            ) AS tmp WHERE NOT EXISTS (
-                SELECT * 
-                FROM POGODA_W_POLSCE 
-                WHERE 
-                    id_stacji = tmp.id_stacji AND
-                    data_pomiaru = tmp.data_pomiaru AND
-                    godzina_pomiaru = tmp.godzina_pomiaru
-            );"""
-
             # Wykonanie polecenia ze zmiennej insertQuery
-            cursor.execute(insertQuery, (
+            cursor.execute(insertQuery(), (
                 id_stacji, stacja, data_pomiaru, godzina_pomiaru, temperatura, predkosc_wiatru, kierunek_wiatru,
                 wilgotnosc_wzgledna, suma_opadu, cisnienie, roznica_cisnien))
             
