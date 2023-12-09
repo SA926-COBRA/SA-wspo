@@ -113,7 +113,7 @@ try:
 # Błąd związany z biblioteką mysql.connector - na przykład błąd połączenia z bazą danych
 except mysql.connector.Error as err:
     print(f"Błąd MySQL: {err}")
-# Błąd niezwiązany z biblioteką mysql.connector - na przykład przy próbie dopisania rekordów do nieistjącej tabeli
+# Błąd niezwiązany z biblioteką mysql.connector - na przykład przy próbie dopisania rekordów do nieistniejącej tabeli
 except Exception as e:
     print(f"Wystąpił błąd: {e}")
 # Zamknięcie połączenia z bazą danych
