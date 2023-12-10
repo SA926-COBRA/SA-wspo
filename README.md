@@ -93,14 +93,3 @@ You can interact with the API documentation by following the link on the page or
 
 You can find 3 different envs for postman: dev, qa and local. The same as in case of the .env file, get the appropriate
 values from your teammates.
-
-## Code guidelines
-
-We follow certain coding practices listed below:
-
-- each PR should be open on a branch with following name convention: <JIRA issue>/subject-of-a-JIRA-issue
-  example: feature/mdbp-47452-validate-incoming-requests-to-feedback-endpoint
-- git commit messages should follow specific naming convention: <JIRA issue>: Subject of a JIRA issue
-  example: MDBP-47452: Created validation pipe for feedbacks endpoint
-- Each new feature should come with some unit tests. As a team we keep the unit test coverage above 80%
-- Each git commit should provide meaningful commit message, especially if new flags, functionalities are being added

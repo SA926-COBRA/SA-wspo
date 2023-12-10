@@ -10,7 +10,7 @@ from sqlQueries import *
 
 class DatabaseConfig:
     def __init__(self):
-        # Wczytanie zmienne środowiskowe z pliku .env
+        # Wczytanie zmiennych środowiskowych z pliku .env
         load_dotenv()
 
         # Przypisanie wartości do atrybutów
