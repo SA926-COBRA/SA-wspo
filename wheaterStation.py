@@ -5,7 +5,7 @@ import os
 import urllib.request
 import xml.etree.ElementTree as ET
 
-# Import funkcji z innych plików
+# Import poleceń SQL
 from sqlQueries import *
 
 class DatabaseConfig:
@@ -20,7 +20,7 @@ class DatabaseConfig:
         self.DB_DATABASE = os.getenv("DB_DATABASE")
 
 # Utworzenie instancji klasy
-db_config = DatabaseConfig()
+dbConfig = DatabaseConfig()
 
 # IMPLEMENTACJA KLASY - DO POPRAWY I ZASTOSOWANIA W KODZIE
 class WeatherMeasurement:
@@ -56,10 +56,10 @@ def getAndParseXmlData(apiUrl):
 try:
     # Połączenie z bazą danych
     db = mysql.connector.connect(
-        host=db_config.DB_HOST,
-        user=db_config.DB_USER,
-        password=db_config.DB_PASSWORD,
-        database=db_config.DB_DATABASE
+        host=dbConfig.DB_HOST,
+        user=dbConfig.DB_USER,
+        password=dbConfig.DB_PASSWORD,
+        database=dbConfig.DB_DATABASE
     )
 
     # Utworzenie kursora w celu połączenia i wykonywania poleceń na bazie danych
