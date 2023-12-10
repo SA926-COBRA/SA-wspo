@@ -49,8 +49,8 @@ def getAndParseXmlData(apiUrl):
     # Przekształcanie znalezionych pomiarów na obiekty
     foundMeasurementObjects = [WeatherMeasurement(measurement) for measurement in foundMeasurement]
 
-    # return foundMeasurementObjects
-    return foundMeasurement
+    return foundMeasurementObjects
+    # return foundMeasurement
 
 # Blok try-except mający na celu zapobieganie całkowitego zatrzymania się programu i wyświetleniu komunikatów w przypadku wystąpienia błędów
 try:
@@ -68,7 +68,7 @@ try:
     cursor.execute(createTableQuery())
     # Wywołanie funkcji i przypisanie zwróconej wartości do zmiennej
     foundMeasurement = getAndParseXmlData(apiUrl)
-
+    
     # Dodawanie rekordów ze sparsowanego XML
     for measurement in foundMeasurement:
         try:
