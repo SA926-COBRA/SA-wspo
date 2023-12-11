@@ -11,6 +11,20 @@ Zadanie praktyczne na stanowisko IT Systems Integration Specialist.
 
 W celu wykonania programu należy uruchomić plik `createAndPopulateWeatherMeasurement.py`.
 
+## Instalacja niezbędnych bibliotek
+
+```shell
+# start up the resources
+npm run docker:start
+
+# stop the resources
+npm run docker:stop
+
+# remove the resources
+npm run docker:remove
+
+```
+
 ## Zmienne środowiskowe
 
 - Należy skopiować plik `.env.example` i zapisać jako `.env`.
