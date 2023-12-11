@@ -13,15 +13,10 @@ W celu wykonania programu należy uruchomić plik `createAndPopulateWeatherMeasu
 
 ## Instalacja niezbędnych bibliotek
 
+W celu instalacji niezbędnych bibliotek należy użyć polecenia:
+
 ```shell
-# start up the resources
-npm run docker:start
-
-# stop the resources
-npm run docker:stop
-
-# remove the resources
-npm run docker:remove
+pip install -r requirements.txt
 
 ```
 
