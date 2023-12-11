@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import services.apiClientService as apiClientService
 import services.dbClientService as dbClientService
 
+# Wczytanie danych dostępowych do bazy danych z pliku .env
 load_dotenv()
 
 # Zapisanie sparsowanych danych z API do listy
@@ -51,7 +52,7 @@ createTableQuery = """CREATE TABLE IF NOT EXISTS POGODA_W_POLSCE (
     roznica_cisnien FLOAT
 );"""
 
-#  Wstawienie rekordu do bazy danych z pominięciem duplikatów
+#  Wstawienie rekordu do bazy danych (z pominięciem duplikatów)
 insertQuery = """INSERT INTO POGODA_W_POLSCE (
     id_stacji,
     stacja, 
@@ -86,6 +87,7 @@ insertQuery = """INSERT INTO POGODA_W_POLSCE (
         godzina_pomiaru = tmp.godzina_pomiaru
 );"""
 
+# Utworzenie instancji bazy danych
 db = dbClientService.getDataBaseInstance()
 
 # Blok try-except mający na celu zapobieganie całkowitego zatrzymania się programu i wyświetleniu komunikatów w przypadku wystąpienia błędów
@@ -109,15 +111,15 @@ try:
             cursor.execute(insertQuery, parsedMeasurement)            
 
         # Błąd podczas dodawania rekordu do tabeli
-        except Exception as e:
-            print(f"Błąd podczas przetwarzania rekordu: {e}")
+        except Exception as error:
+            print(f"Błąd podczas przetwarzania rekordu: {error}")
 
     # Zatwierdzenie zmian w bazie danych
     db.commit()
 
 # Błąd niezwiązany z biblioteką mysql.connector - na przykład przy próbie dopisania rekordów do nieistniejącej tabeli
-except Exception as e:
-    print(f"Wystąpił błąd: {e}")
+except Exception as error:
+    print(f"Wystąpił błąd: {error}")
 
 # Zamknięcie połączenia z bazą danych
 finally:
