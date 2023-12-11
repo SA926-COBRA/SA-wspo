@@ -35,5 +35,5 @@ pip3 install -r requirements.txt
 ## Sposób cyklicznego pobierania danych z API do bazy danych
 
 - W celu pobierania i zasilania bazy danych danymi w sposób cykliczny wykorzystał bym technologie AWS Lambda i AWS CloudWatch Events jako Scheduler.
-- W celu implementacji wymienionych rozwiązań do przesłanego programu utworzyłbym dodatkowy serwis, którego zadaniem byłoby pobieranie daneych z API i zapisanie ich do bazy danych.
+- W celu implementacji wymienionych rozwiązań do przesłanego programu utworzyłbym dodatkowy serwis, którego zadaniem byłoby pobieranie danych z API i zapisanie ich do bazy danych.
 - Serwis zawierałby trigger mający na celu cykliczne uruchomienie Schedulera wywołujący Lambdę według ustalonego harmonogramu (na przykład co 4 godziny).
