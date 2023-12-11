@@ -20,6 +20,13 @@ pip install -r requirements.txt
 
 ```
 
+lub opcjonalnie
+
+```shell
+pip3 install -r requirements.txt
+
+```
+
 ## Zmienne środowiskowe
 
 - Należy skopiować plik `.env.example` i zapisać jako `.env`.
