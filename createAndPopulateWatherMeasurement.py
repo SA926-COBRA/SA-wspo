@@ -1,4 +1,4 @@
-# Import niezbędnych bibliotek
+# Import bibliotek i serwisów
 from dotenv import load_dotenv
 import services.apiClientService as apiClientService
 import services.dbClientService as dbClientService

@@ -1,8 +1,9 @@
+# Import bibliotek
 import mysql.connector
 import os
 
+# Połączenie z bazą danych
 def getDataBaseInstance():
-
     # Blok try-except mający na celu zapobieganie całkowitego zatrzymania się serwisu i wyświetleniu komunikatów w przypadku wystąpienia błędów
     try:
         dbInstance = mysql.connector.connect(

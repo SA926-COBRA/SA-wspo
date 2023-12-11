@@ -1,3 +1,4 @@
+# Import bibliotek
 import os
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -6,7 +7,6 @@ STATUS_OK = 200
 
 # Pobieranie i parsowanie danych z API
 def getAndParseXmlData(path):
-
     # Blok try-except mający na celu zapobieganie całkowitego zatrzymania się serwisu i wyświetleniu komunikatów w przypadku wystąpienia błędów
     try:
         xmlUrl = urllib.request.urlopen(os.getenv("API_URL") + path)
