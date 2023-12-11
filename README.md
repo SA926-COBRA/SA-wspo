@@ -9,7 +9,7 @@
 
 ## Wykonanie programu
 
-W celu wykonania programu należy uruchomić plik `createAndPopulateWeatherMeasurement.py`.
+- W celu wykonania programu należy uruchomić plik `createAndPopulateWeatherMeasurement.py`.
 
 ## Instalacja niezbędnych bibliotek
 
