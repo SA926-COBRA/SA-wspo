@@ -1,4 +1,4 @@
-# Bartosz Kulpa - Zadanie praktyczne
+# Zadanie praktyczne - Bartosz Kulpa
 
 Zadanie praktyczne na stanowisko IT Systems Integration Specialist.
 
@@ -9,7 +9,8 @@ Zadanie praktyczne na stanowisko IT Systems Integration Specialist.
 
 ## Zmienne środowiskowe
 
-Należy skopiować plik `.env.example` i zapisać jako `.env`. Następnie należy ustawić odpowiednie dane dostępowe do bazy danych.
+- Należy skopiować plik `.env.example` i zapisać jako `.env`.
+- Następnie należy ustawić odpowiednie dane dostępowe do bazy danych.
 
 ## Sposób cyklicznego pobierania danych z API do bazy danych
 
