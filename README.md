@@ -1,6 +1,6 @@
 # Zadanie praktyczne - Bartosz Kulpa
 
-Zadanie praktyczne na stanowisko IT Systems Integration Specialist.
+- Zadanie praktyczne na stanowisko IT Systems Integration Specialist.
 
 ## Koncepcja działania programu
 
@@ -13,14 +13,14 @@ W celu wykonania programu należy uruchomić plik `createAndPopulateWeatherMeasu
 
 ## Instalacja niezbędnych bibliotek
 
-W celu instalacji niezbędnych bibliotek należy użyć polecenia:
+- W celu instalacji niezbędnych bibliotek należy użyć polecenia:
 
 ```shell
 pip install -r requirements.txt
 
 ```
 
-lub opcjonalnie
+- lub opcjonalnie
 
 ```shell
 pip3 install -r requirements.txt
