@@ -1,36 +1,9 @@
 # Import niezbędnych bibliotek
 from dotenv import load_dotenv
-import mysql.connector
-import os
-import urllib.request
-import xml.etree.ElementTree as ET
+import services.apiClientService as apiClientService
+import services.dbClientService as dbClientService
 
-# Napisac w komentarzu czemu wykorzystana jest klasa
-class DatabaseConfig:
-    def __init__(self):
-        # Wczytanie zmiennych środowiskowych z pliku .env
-        load_dotenv()
-
-        # Przypisanie wartości do atrybutów
-        self.DB_HOST = os.getenv("DB_HOST")
-        self.DB_USER = os.getenv("DB_USER")
-        self.DB_PASSWORD = os.getenv("DB_PASSWORD")
-        self.DB_DATABASE = os.getenv("DB_DATABASE")
-
-# Utworzenie instancji klasy
-dbConfig = DatabaseConfig()
-
-# Przypisanie linku API do zmiennej
-apiUrl = "https://danepubliczne.imgw.pl/api/data/synop/format/xml"
-
-# Pobieranie i parsowanie danych z API
-def getAndParseXmlData(apiUrl):
-    xmlUrl = urllib.request.urlopen(apiUrl)
-    xmlAsString = xmlUrl.read()
-    xmlTree = ET.fromstring(xmlAsString)
-    foundMeasurement = xmlTree.findall("item")
-
-    return foundMeasurement
+load_dotenv()
 
 # Zapisanie sparsowanych danych z API do listy
 def parseMeasurement(measurement):
@@ -113,32 +86,28 @@ insertQuery = """INSERT INTO POGODA_W_POLSCE (
         godzina_pomiaru = tmp.godzina_pomiaru
 );"""
 
+db = dbClientService.getDataBaseInstance()
+
 # Blok try-except mający na celu zapobieganie całkowitego zatrzymania się programu i wyświetleniu komunikatów w przypadku wystąpienia błędów
 try:
-    # Połączenie z bazą danych
-    db = mysql.connector.connect(
-        host=dbConfig.DB_HOST,
-        user=dbConfig.DB_USER,
-        password=dbConfig.DB_PASSWORD,
-        database=dbConfig.DB_DATABASE
-    )
 
     # Utworzenie kursora w celu połączenia i wykonywania poleceń na bazie danych
     cursor = db.cursor()
 
     # Wykonanie zapytania ze zmiennej createTableQuery
-    cursor.execute(createTableQuery())
+    cursor.execute(createTableQuery)
 
     # Wywołanie funkcji i przypisanie zwróconej wartości do zmiennej
-    foundMeasurement = getAndParseXmlData(apiUrl)
-    
+    foundMeasurement = apiClientService.getAndParseXmlData("/data/synop/format/xml")
+
     # Dodawanie rekordów ze sparsowanego XML
     for measurement in foundMeasurement:
         try:
             parsedMeasurement = parseMeasurement(measurement)
+
             # Wykonanie polecenia ze zmiennej insertQuery
-            cursor.execute(insertQuery(), parsedMeasurement)            
-   
+            cursor.execute(insertQuery, parsedMeasurement)            
+
         # Błąd podczas dodawania rekordu do tabeli
         except Exception as e:
             print(f"Błąd podczas przetwarzania rekordu: {e}")
@@ -146,14 +115,10 @@ try:
     # Zatwierdzenie zmian w bazie danych
     db.commit()
 
-# Błąd związany z biblioteką mysql.connector - na przykład błąd połączenia z bazą danych
-except mysql.connector.Error as err:
-    print(f"Błąd MySQL: {err}")
-
 # Błąd niezwiązany z biblioteką mysql.connector - na przykład przy próbie dopisania rekordów do nieistniejącej tabeli
 except Exception as e:
     print(f"Wystąpił błąd: {e}")
-    
+
 # Zamknięcie połączenia z bazą danych
 finally:
     if db.is_connected():

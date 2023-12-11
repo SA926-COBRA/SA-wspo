@@ -12,7 +12,7 @@ the [Serverless Framework](https://www.serverless.com/).
 
 ## Environment variables
 
-Copy the `.env.example` file to `.env` and get the appropriate values from your teammates.
+Copy the `.env.example` file to `.env` and set the appropriate values.
 
 ## Local resources
 
