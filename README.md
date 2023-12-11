@@ -1,6 +1,5 @@
-# Zadanie rekrutacyjne
+# Bartosz Kulpa - Zadanie praktyczne
 
-Bartosz Kulpa
 Zadanie praktyczne na stanowisko IT Systems Integration Specialist.
 
 ## Koncepcja działania programu
