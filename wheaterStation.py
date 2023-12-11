@@ -78,7 +78,6 @@ createTableQuery = """CREATE TABLE IF NOT EXISTS POGODA_W_POLSCE (
     roznica_cisnien FLOAT
 );"""
 
-
 #  Wstawienie rekordu do bazy danych z pominięciem duplikatów
 insertQuery = """INSERT INTO POGODA_W_POLSCE (
     id_stacji,
@@ -114,7 +113,6 @@ insertQuery = """INSERT INTO POGODA_W_POLSCE (
         godzina_pomiaru = tmp.godzina_pomiaru
 );"""
 
-
 # Blok try-except mający na celu zapobieganie całkowitego zatrzymania się programu i wyświetleniu komunikatów w przypadku wystąpienia błędów
 try:
     # Połączenie z bazą danych
@@ -127,8 +125,10 @@ try:
 
     # Utworzenie kursora w celu połączenia i wykonywania poleceń na bazie danych
     cursor = db.cursor()
+
     # Wykonanie zapytania ze zmiennej createTableQuery
     cursor.execute(createTableQuery())
+
     # Wywołanie funkcji i przypisanie zwróconej wartości do zmiennej
     foundMeasurement = getAndParseXmlData(apiUrl)
     
@@ -149,9 +149,11 @@ try:
 # Błąd związany z biblioteką mysql.connector - na przykład błąd połączenia z bazą danych
 except mysql.connector.Error as err:
     print(f"Błąd MySQL: {err}")
+
 # Błąd niezwiązany z biblioteką mysql.connector - na przykład przy próbie dopisania rekordów do nieistniejącej tabeli
 except Exception as e:
     print(f"Wystąpił błąd: {e}")
+    
 # Zamknięcie połączenia z bazą danych
 finally:
     if db.is_connected():
