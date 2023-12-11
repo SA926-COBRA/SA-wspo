@@ -9,6 +9,7 @@ STATUS_OK = 200
 def getAndParseXmlData(path):
     # Blok try-except mający na celu zapobieganie całkowitego zatrzymania się serwisu i wyświetleniu komunikatów w przypadku wystąpienia błędów
     try:
+        # Pobieranie i parsowanie danych z API
         xmlUrl = urllib.request.urlopen(os.getenv("API_URL") + path)
 
         # Sprawdzanie czy API zwraca status code 200

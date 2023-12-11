@@ -19,7 +19,7 @@ def parseMeasurement(measurement):
         suma_opadu = measurement.find("suma_opadu").text
         cisnienie = measurement.find("cisnienie").text
 
-        # Wyliczanie od różnicy ciśnienia wzorcowego tylko jeśli pole cisnienie nie przyjmuje wartości NULL
+        # Wyliczanie różnicy od ciśnienia wzorcowego (tylko jeśli pole cisnienie nie przyjmuje wartości NULL)
         roznica_cisnien = 1013.25 - float(cisnienie) if cisnienie else None
 
         return [
@@ -87,7 +87,7 @@ insertQuery = """INSERT INTO POGODA_W_POLSCE (
         godzina_pomiaru = tmp.godzina_pomiaru
 );"""
 
-# Utworzenie instancji bazy danych
+# Utworzenie instancji połączenia z bazą danych
 db = dbClientService.getDataBaseInstance()
 
 # Blok try-except mający na celu zapobieganie całkowitego zatrzymania się programu i wyświetleniu komunikatów w przypadku wystąpienia błędów
