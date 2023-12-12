@@ -1,6 +1,6 @@
 # Zadanie praktyczne - Bartosz Kulpa
 
-- Zadanie praktyczne na stanowisko IT Systems Integration Specialist.
+Zadanie praktyczne na stanowisko IT Systems Integration Specialist.
 
 ## Koncepcja działania programu
 
@@ -9,18 +9,18 @@
 
 ## Wykonanie programu
 
-- W celu wykonania programu należy uruchomić plik `createAndPopulateWeatherMeasurement.py`.
+W celu wykonania programu należy uruchomić plik `createAndPopulateWeatherMeasurement.py`.
 
 ## Instalacja niezbędnych bibliotek
 
-- W celu instalacji niezbędnych bibliotek należy użyć polecenia:
+W celu instalacji niezbędnych bibliotek należy użyć polecenia:
 
 ```shell
 pip install -r requirements.txt
 
 ```
 
-- lub opcjonalnie
+lub opcjonalnie
 
 ```shell
 pip3 install -r requirements.txt
@@ -29,11 +29,13 @@ pip3 install -r requirements.txt
 
 ## Zmienne środowiskowe
 
-- Należy skopiować plik `.env.example` i zapisać jako `.env`.
-- Następnie należy ustawić odpowiednie dane dostępowe do bazy danych.
+W celu konfiguracji połączenia z bazą danych należy:
+
+- Skopiować plik `.env.example` i zapisać jako `.env`.
+- Ustawić odpowiednie dane dostępowe do bazy danych.
 
 ## Sposób cyklicznego pobierania danych z API do bazy danych
 
-- W celu pobierania i zasilania bazy danych danymi w sposób cykliczny wykorzystał bym technologie AWS Lambda i AWS CloudWatch Events jako Scheduler.
-- W celu implementacji wymienionych rozwiązań do przesłanego programu utworzyłbym dodatkowy serwis, którego zadaniem byłoby pobieranie danych z API i zapisanie ich do bazy danych.
-- Serwis zawierałby trigger mający na celu cykliczne uruchomienie Schedulera wywołujący Lambdę według ustalonego harmonogramu (na przykład co 4 godziny).
+W celu pobierania i zasilania bazy danych danymi w sposób cykliczny wykorzystał bym technologie AWS Lambda i AWS CloudWatch Events jako Scheduler.</br>
+W celu implementacji wymienionych rozwiązań do przesłanego programu utworzyłbym dodatkowy serwis, którego zadaniem byłoby pobieranie danych z API i zapisanie ich do bazy danych.</br
+Serwis zawierałby trigger mający na celu cykliczne uruchomienie Schedulera wywołujący Lambdę według ustalonego harmonogramu (na przykład co 4 godziny).
