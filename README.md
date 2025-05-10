@@ -29,8 +29,5 @@ pip3 install -r requirements.txt
 ## Environmental Variables
 
 To configure the database connection, you should:
-
+...
 - Copy the .env.example file and save it as .env.
-- Set the appropriate database access details.
-
-
