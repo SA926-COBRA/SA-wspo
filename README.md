@@ -1,6 +1,6 @@
 # Weather Station
 
-## Program Operation Concept
+## Program Operation Concept.
 
 The aim of the program is to populate the `WEATHER_IN_POLAND` table with data regarding weather measurements provided by the Institute of Meteorology and Water Management (IMGW). The program is developed in Python using MySQL queries.</br>
 </br>
