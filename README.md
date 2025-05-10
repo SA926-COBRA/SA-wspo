@@ -6,7 +6,7 @@ The aim of the program is to populate the `WEATHER_IN_POLAND` table with data re
 </br>
 Upon execution, the program communicates with the IMGW API, retrieves data from the moment of invocation, processes it accordingly, and then populates the database. The program's functionality has been tested on a MySQL database within a Docker environment.
 
-## Program Execution
+## Program Execution.
 
 To execute the program, run the file `createAndPopulateWeatherMeasurement.py`.
 
